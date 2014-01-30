@@ -8,9 +8,9 @@
 "
 
 
-function! Folde_PS1_Generator()
+function! Folde_PS1_Extractor()
     let lines = join(getline(v:foldstart, v:foldend), "\n")
-    let sub = substitute( lines, '\s\{-}\(<#\).*\.[Ss][Yy][Nn][Oo][Pp][Ss][Ii][Ss]\_.\{-}\(\w[^\x0]*\).*', '\1 \2', '' )
+    let sub = substitute( lines, '\s\{-}\(<#\).*\.[Ss][Yy][Nn][Oo][Pp][Ss][Ii][Ss]\_.\{-}\(\w[^\x0]*\).*', '\2', '' )
     "                             space (non-greedy)
     "                                     <#
     "                                         Anything
@@ -27,32 +27,52 @@ function! Folde_PS1_Generator()
     return sub
 endfunction 
 
+let g:folde_style = 'lefty'
+let g:folde_style = 'vim'
+let g:folde_style = 'righty'
+let g:folde_style = 'hard_right'
+let g:folde_style = 'testing'
+
+
+
+
+function! Folde_Formatter(linecount, start_text, feature_text)
+    if g:folde_style == 'testing'
+        return '--| ' . a:linecount . ' | ' . a:start_text . ' | ' . a:feature_text . ' |'
+    endif
+
+    if g:folde_style == 'righty'
+        let linecount_text = "   " . a:linecount . " lines " 
+        let padded_feature_text = a:start_text . ' ' . a:feature_text . repeat(' ', 240)
+
+        let num_w = getwinvar( 0, '&number' ) * getwinvar( 0, '&numberwidth' )
+        let fold_w = getwinvar( 0, '&foldcolumn' )
+        let padded_feature_text = strpart( padded_feature_text, 0, winwidth(0) - strlen( linecount_text ) - num_w - fold_w )
+        return padded_feature_text . linecount_text 
+    endif
+endfunction 
+
 
 " Set a nicer foldtext function
 set foldtext=Folde_Generator()
 function! Folde_Generator()
-    let line = getline(v:foldstart)
+    let start_text = getline(v:foldstart)
 
-    let feature = ''
+    let feature_text = ''
 
     " Feature Extraction
-    if match( line, '^<#.*$' ) == 0
-        let feature = Folde_PS1_Generator()
+    if match( start_text, '^<#.*$' ) == 0
+        let feature_text = Folde_PS1_Extractor()
     endif
 
-    if feature == ''
-        let feature = line
+    if feature_text == ''
+        let feature_text = start_text
     endif
 
     " Styling
-    let n = v:foldend - v:foldstart + 1
-    let info = "   " . n . " lines " 
-    let feature = feature . repeat(' ', 120)
+    let linecount = v:foldend - v:foldstart + 1
 
-    let num_w = getwinvar( 0, '&number' ) * getwinvar( 0, '&numberwidth' )
-    let fold_w = getwinvar( 0, '&foldcolumn' )
-    let feature = strpart( feature, 0, winwidth(0) - strlen( info ) - num_w - fold_w )
-    return feature . info 
+    return Folde_Formatter(linecount, start_text, feature_text)
 endfunction 
 
 
