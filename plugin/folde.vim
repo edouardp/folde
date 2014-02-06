@@ -7,6 +7,23 @@
 "    TODO: support for filetype based feature extraction for multiline comments etc
 "
 
+function! Folde_CStyle_Extractor()
+  let line = getline(v:foldstart)
+  if match( line, '^[ \t]*\(\/\*\|\/\/\)[*/\\]*[ \t]*$' ) == 0
+    let initial = substitute( line, '^\([ \t]\)*\(\/\*\|\/\/\)\(.*\)', '\1\2', '' )
+    let linenum = v:foldstart + 1
+    while linenum < v:foldend
+      let line = getline( linenum )
+      let comment_content = substitute( line, '^\([ \t\/\*]*\)\(.*\)$', '\2', 'g' )
+      if comment_content != ''
+        break
+      endif
+      let linenum = linenum + 1
+    endwhile
+    return comment_content
+endfunction
+
+
 
 function! Folde_PS1_Extractor()
     let lines = join(getline(v:foldstart, v:foldend), "\n")
@@ -121,6 +138,8 @@ function! Folde_Generator()
     let feature_text = ''
     if match( start_text, '^<#.*$' ) == 0
         let feature_text = Folde_PS1_Extractor()
+    else 
+        let feature_text = Folde_CStyle_Extractor()
     endif
 
     if feature_text == ''
