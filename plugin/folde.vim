@@ -24,6 +24,10 @@ function! Folde_CStyle_Extractor()
 endfunction
 
 
+function! Folde_CSharpXMLDocComment_Extractor()
+
+endfunction
+
 
 function! Folde_PS1_Extractor()
     let lines = join(getline(v:foldstart, v:foldend), "\n")
@@ -109,7 +113,7 @@ endfunction
 
 
 function! Folde_Formatter(dashes, level, linecount, start_text, feature_text)
-    if g:folde_style == 'testing'
+    if g:folde_style == 'debug'
         return '--| dashes: ' . v:folddashes . ' | level: ' . v:foldlevel . ' | lines: ' . a:linecount . ' | ' . a:start_text . ' | ' . a:feature_text . ' |'
     endif
 
@@ -123,8 +127,12 @@ function! Folde_Formatter(dashes, level, linecount, start_text, feature_text)
         return padded_feature_text . linecount_text 
     endif
 
-    if g:folde_style == 'test2'
+    if g:folde_style == 'simple'
         return Folde_Format('--| Left |', '-', '| Right |--')
+    endif
+
+    if g:folde_style == 'vim'
+        return Folde_Format('--VIM--', '-', '--')
     endif
 endfunction 
 
@@ -151,5 +159,24 @@ function! Folde_Generator()
 
     return Folde_Formatter(v:folddashes, v:foldlevel, linecount, start_text, feature_text)
 endfunction 
+
+
+
+" -- FoldeStyle -------
+
+function! s:get_folde_styles(a, l, p)
+  let files = split(globpath(&rtp, 'autoload/folde/styles/'.a:a.'*'), "\n")
+  return map(files, 'fnamemodify(v:val, ":t:r")')
+endfunction
+
+function! s:folde_set_style(...)
+  if a:0
+    call folde#set_folde_style(a:1)
+  else
+    echo g:folde_style
+  endif
+endfunction
+
+command! -nargs=? -complete=customlist,<sid>get_folde_styles FoldeStyle call <sid>folde_set_style(<f-args>)
 
 
