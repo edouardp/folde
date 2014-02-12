@@ -40,13 +40,12 @@ function! Folde_PS1_Extractor()
     "                                                                                     word character
     "                                                                                         Anything but NUL
     "                                                                                                anything
-    "                                                                             
 
     if sub == lines
       let sub = getline(v:foldstart)
     endif
     return sub
-endfunction 
+endfunction
 
 let g:folde_style = 'lefty'
 let g:folde_style = 'vim'
@@ -72,7 +71,7 @@ endfunction
 " +{level:5l-}-| {text} |--{expand:-}--| {lines:3r} Lines |--
 
 " Substitute Functions
-" --| {FuncOne()} |--{expand}--| {FuncTwo()} Lines |-- 
+" --| {FuncOne()} |--{expand}--| {FuncTwo()} Lines |--
 
 
 
@@ -86,7 +85,7 @@ endfunction
 
 function! Folde_Exe(command)
   let save_a = @a
-  try 
+  try
     silent! redir @a
     silent! exe a:command
     redir END
@@ -107,24 +106,28 @@ function! Folde_Format(left, center, right)
         let sign_width = 2
     endif
     let pad_width = window_text_width - strlen(a:left) - strlen(a:right) - sign_width
-    
+
     return a:left . repeat(a:center, pad_width) . a:right
 endfunction
 
 
 function! Folde_Formatter(dashes, level, linecount, start_text, feature_text)
+    if exists('g:Folde_Formatter_Function')
+        return g:Folde_Formatter_Function()
+    endif
+    
     if g:folde_style == 'debug'
         return '--| dashes: ' . v:folddashes . ' | level: ' . v:foldlevel . ' | lines: ' . a:linecount . ' | ' . a:start_text . ' | ' . a:feature_text . ' |'
     endif
 
     if g:folde_style == 'righty'
-        let linecount_text = "   " . a:linecount . " lines " 
+        let linecount_text = "   " . a:linecount . " lines "
         let padded_feature_text = a:start_text . ' ' . a:feature_text . repeat(' ', 240)
 
         let num_w = getwinvar( 0, '&number' ) * getwinvar( 0, '&numberwidth' )
         let fold_w = getwinvar( 0, '&foldcolumn' )
         let padded_feature_text = strpart( padded_feature_text, 0, winwidth(0) - strlen( linecount_text ) - num_w - fold_w )
-        return padded_feature_text . linecount_text 
+        return padded_feature_text . linecount_text
     endif
 
     if g:folde_style == 'simple'
@@ -134,7 +137,7 @@ function! Folde_Formatter(dashes, level, linecount, start_text, feature_text)
     if g:folde_style == 'vim'
         return Folde_Format('--VIM--', '-', '--')
     endif
-endfunction 
+endfunction
 
 
 " Set a nicer foldtext function
@@ -146,7 +149,7 @@ function! Folde_Generator()
     let feature_text = ''
     if match( start_text, '^<#.*$' ) == 0
         let feature_text = Folde_PS1_Extractor()
-    else 
+    else
         let feature_text = Folde_CStyle_Extractor()
     endif
 
@@ -158,7 +161,7 @@ function! Folde_Generator()
     let linecount = v:foldend - v:foldstart + 1
 
     return Folde_Formatter(v:folddashes, v:foldlevel, linecount, start_text, feature_text)
-endfunction 
+endfunction
 
 
 
