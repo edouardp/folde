@@ -1,5 +1,5 @@
 
-function! folde#styles#vim#Formatter()
+function! folde#styles#vim#Formatter(params)
   return folde#format('--  4 lines folded ', '-', '')
 endfunction
 

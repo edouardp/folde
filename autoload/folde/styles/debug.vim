@@ -1,6 +1,6 @@
 
 
-function! folde#styles#debug#Formatter()
+function! folde#styles#debug#Formatter(params)
   return folde#format('DEBUG GOES HERE', ' ', '')
 endfunction
 

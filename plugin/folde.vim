@@ -73,6 +73,8 @@ endfunction
 " Substitute Functions
 " --| {FuncOne()} |--{expand}--| {FuncTwo()} Lines |--
 
+" --/ 4 /---/ Now is the witer of our discontent /---------------/ Blah / --
+
 
 
 " {text}
@@ -113,7 +115,8 @@ endfunction
 
 function! Folde_Formatter(dashes, level, linecount, start_text, feature_text)
     if exists('g:Folde_Formatter_Function')
-        return g:Folde_Formatter_Function()
+        let param = { 'dashes': a:dashes, 'level': a:level, 'linecount': a:linecount, 'start_text': a:start_text, 'feature_text': a:feature_text }
+        return g:Folde_Formatter_Function(l:param)
     endif
     
     if g:folde_style == 'debug'

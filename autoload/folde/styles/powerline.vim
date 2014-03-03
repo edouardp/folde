@@ -1,6 +1,6 @@
 
-function! folde#styles#powerline#Formatter()
-  return folde#format('—— Left ', '—', ' :10 ——')
+function! folde#styles#powerline#Formatter(p)
+  return folde#format('—— ' . a:p.feature_text . ' ', '—', ' :' . a:p.linecount . ' ——')
 endfunction
 
 function! folde#styles#powerline#set_style()
