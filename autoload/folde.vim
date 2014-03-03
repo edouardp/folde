@@ -15,7 +15,7 @@ function! folde#set_folde_style(name)
   endtry
 
   redraw!
-  echo "Folde Style: " . g:folde_style
+  "echo "Folde Style: " . g:folde_style
 endfunction
 
 
@@ -32,7 +32,7 @@ function! folde#format(left, center, right)
         let sign_width = 2
     endif
     let pad_width = window_text_width - strwidth(a:left) - strwidth(a:right) - sign_width
-    echo pad_width
+    "echo pad_width
     return a:left . repeat(a:center, pad_width) . a:right
  endfunction
 

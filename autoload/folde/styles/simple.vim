@@ -1,7 +1,7 @@
 
 
 function! folde#styles#simple#Formatter(params)
-  let r = a:params.linecount . ' lines'  
+  let r = a:params.linecount . ' lines '  
   if a:params.start_text != a:params.feature_text
     let l = a:params.start_text . ' ' . a:params.feature_text
   else
