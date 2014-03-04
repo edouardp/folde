@@ -7,6 +7,22 @@
 "    TODO: support for filetype based feature extraction for multiline comments etc
 "
 
+function! Folde_Generic_Comment_Extractor()
+  let linenum = v:foldstart
+  while linenum < v:foldend
+    let line = getline( linenum )
+    let comment_content = substitute( line, '^\(\W*\)\(.*\)\(\W*\)$', '\2', 'g' )
+    if comment_content != ''
+      " Strip trailing non-word content
+      let comment_content = substitute( comment_content, '\W*$', '', '' )
+      break
+    endif
+    let linenum = linenum + 1
+  endwhile
+  return comment_content
+endfunction
+
+
 function! Folde_CStyle_Extractor()
   let line = getline(v:foldstart)
   if match( line, '^[ \t]*\(\/\*\|\/\/\)[*/\\]*[ \t]*$' ) == 0
@@ -21,6 +37,9 @@ function! Folde_CStyle_Extractor()
       let linenum = linenum + 1
     endwhile
     return comment_content
+  else
+    return "BLANK"
+  endif
 endfunction
 
 
@@ -53,12 +72,19 @@ let g:folde_style = 'righty'
 let g:folde_style = 'hard_right'
 let g:folde_style = 'testing'
 
+function! Folde_Initial_Chars(input_string)
+    return substitute(a:input_string, '^\(\s*[^0-9A-Za-z_ ]*\).*$', '\1', 'g')
+    "return substitute(a:input_string, '^\s*\([^0-9A-Za-z_ ]*\).*$', '\1', 'g')
+endfunction
 
 function! Folde_Trim(input_string)
     " Credit: http://stackoverflow.com/questions/4478891
     return substitute(a:input_string, '^\s*\(.\{-}\)\s*$', '\1', '')
 endfunction
 
+function! Folde_Trim_Right(input_string)
+    return substitute(a:input_string, '^\(.\{-}\)\s*$', '\1', '')
+endfunction
 
 " No Foldlevel
 " --| Feature Text |--------------------------------------| 26 Lines |--
@@ -146,14 +172,16 @@ endfunction
 " Set a nicer foldtext function
 set foldtext=Folde_Generator()
 function! Folde_Generator()
-    let start_text = Folde_Trim(getline(v:foldstart))
+    let start_text = Folde_Initial_Chars(getline(v:foldstart))
+    let start_text = Folde_Trim_Right(start_text)
+    echo '>' . start_text . '<'
 
     " Feature Extraction
     let feature_text = ''
-    if match( start_text, '^<#.*$' ) == 0
+    if match( start_text, '^\s*<#.*$' ) == 0
         let feature_text = Folde_PS1_Extractor()
     else
-        let feature_text = Folde_CStyle_Extractor()
+        let feature_text = Folde_Generic_Comment_Extractor()
     endif
 
     if feature_text == ''
