@@ -3,4 +3,4 @@
 
 Folding plugin for Vim
 
-![folde demo](https://raw.github.com/edouardp/folde/master/folde.gif)  
+![folde demo](https://raw.github.com/edouardp/folde/master/folde-demo.gif)  
