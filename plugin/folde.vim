@@ -12,48 +12,11 @@ function! Folde_Generic_Comment_Extractor()
 endfunction
 
 
-function! Folde_CStyle_Extractor()
-  let line = getline(v:foldstart)
-  if match( line, '^[ \t]*\(\/\*\|\/\/\)[*/\\]*[ \t]*$' ) == 0
-    let initial = substitute( line, '^\([ \t]\)*\(\/\*\|\/\/\)\(.*\)', '\1\2', '' )
-    let linenum = v:foldstart + 1
-    while linenum < v:foldend
-      let line = getline( linenum )
-      let comment_content = substitute( line, '^\([ \t\/\*]*\)\(.*\)$', '\2', 'g' )
-      if comment_content != ''
-        break
-      endif
-      let linenum = linenum + 1
-    endwhile
-    return comment_content
-  else
-    return "BLANK"
-  endif
-endfunction
-
-
 function! Folde_CSharpXMLDocComment_Extractor()
 
 endfunction
 
 
-function! Folde_PS1_Extractor()
-    let lines = join(getline(v:foldstart, v:foldend), "\n")
-    let sub = substitute( lines, '\s\{-}\(<#\).*\.[Ss][Yy][Nn][Oo][Pp][Ss][Ii][Ss]\_.\{-}\(\w[^\x0]*\).*', '\2', '' )
-    "                             space (non-greedy)
-    "                                     <#
-    "                                         Anything
-    "                                            .Synopsis (case insensitive)
-    "                                                                             space (non-greedy)
-    "                                                                                     word character
-    "                                                                                         Anything but NUL
-    "                                                                                                anything
-
-    if sub == lines
-      let sub = getline(v:foldstart)
-    endif
-    return sub
-endfunction
 
 if !exists('g:folde_style')
     let g:folde_style = 'simple'
@@ -148,12 +111,13 @@ function! Folde_Generator()
     "echo '>' . start_text . '<'
 
     " Feature Extraction
-    let feature_text = ''
-    if match( start_text, '^\s*<#.*$' ) == 0
-        let feature_text = Folde_PS1_Extractor()
-    else
-        let feature_text = Folde_Generic_Comment_Extractor()
-    endif
+    let ftype = &ft
+    echo "ftype = " . ftype
+    try
+      let feature_text = folde#extractors#{l:ftype}#extract()
+    catch
+      let feature_text = "XXX"
+    endtry
 
     if feature_text == ''
         let feature_text = start_text
