@@ -1,6 +1,7 @@
 "
+"  PS1 Feature Extractor
 "
-"
+
 function! folde#extractors#ps1#extract_synopsis()
     let lines = join(getline(v:foldstart, v:foldend), "\n")
     let sub = substitute( lines, '\s\{-}\(<#\).*\.[Ss][Yy][Nn][Oo][Pp][Ss][Ii][Ss]\_.\{-}\(\w[^\x0]*\).*', '\2', '' )
