@@ -1,0 +1,66 @@
+*folde.txt*   A Folding Plugin
+
+Maintainer: Edouard Poor <folde@edouard.info>
+License:    Apache 2.0
+Homepage:   http://github.com/edouardp/folde
+Version:    0.1
+
+==============================================================================
+
+INTRODUCTION                                                *folde-intro*
+
+This plugin provides a  
+
+------------------------------------------------------------------------------
+
+ABOUT                                                       *folde-about*
+
+Grab the latest version, or report a bug on GitHub:
+
+http://github.com/PProvost/vim-ps1
+
+------------------------------------------------------------------------------
+
+STYLES                                                      *folde-styles*
+
+Something about styles
+
+------------------------------------------------------------------------------
+
+EXTRACTORS                                                  *folde-extractrors*
+
+Talk about featuer extraction
+
+------------------------------------------------------------------------------
+
+COMMANDS                                                    *folde-commands*
+
+Talk about :FoldeStyle here.
+>
+    :FoldeStyle [name]
+<
+------------------------------------------------------------------------------
+
+OPTIONS                                                     *folde-options* 
+
+    *g:folde_style* = 'name'
+
+    String name of style. Refers to the the style file:
+ >
+        {vimruntimepath}/autoload/style/{name}.vim
+<    
+    Set this in you .vimrc file to set the initial folde style
+    as if you had called manually *:FoldeStyle*
+>
+       let g:folde_style = 'boxy'
+<
+------------------------------------------------------------------------------
+
+CHANGELOG                                                   *folde-changelog*
+
+0.1~
+    * Initial Release
+
+
+==============================================================================
+vim:ft=help:
