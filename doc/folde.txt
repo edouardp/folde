@@ -23,13 +23,13 @@ http://github.com/PProvost/vim-ps1
 
 STYLES                                                      *folde-styles*
 
-Something about styles
+Something about folde styles
 
 ------------------------------------------------------------------------------
 
 EXTRACTORS                                                  *folde-extractrors*
 
-Talk about featuer extraction
+Talk about feature extraction
 
 ------------------------------------------------------------------------------
 
