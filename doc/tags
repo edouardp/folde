@@ -1,0 +1,10 @@
+:FoldeStyle	folde.txt	/*:FoldeStyle*
+folde-about	folde.txt	/*folde-about*
+folde-changelog	folde.txt	/*folde-changelog*
+folde-commands	folde.txt	/*folde-commands*
+folde-extractrors	folde.txt	/*folde-extractrors*
+folde-intro	folde.txt	/*folde-intro*
+folde-options	folde.txt	/*folde-options*
+folde-styles	folde.txt	/*folde-styles*
+folde.txt	folde.txt	/*folde.txt*
+g:folde_style	folde.txt	/*g:folde_style*

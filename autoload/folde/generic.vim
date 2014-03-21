@@ -2,6 +2,18 @@
 "
 "
 
+function! folde#generic#first_line()
+endfunction
+
+function! folde#generic#last_line()
+endfunction
+
+function! folde#generic#starts_with()
+endfunction
+
+function! folde#generic#ends_with()
+endfunction
+
 function! folde#generic#extract_comment_feature()
   let linenum = v:foldstart
   while linenum < v:foldend
