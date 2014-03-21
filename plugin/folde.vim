@@ -112,7 +112,7 @@ function! Folde_Generator()
 
     " Feature Extraction
     let ftype = &ft
-    echo "ftype = " . ftype
+    "echo "ftype = " . ftype
     try
       let feature_text = folde#extractors#{l:ftype}#extract()
     catch
