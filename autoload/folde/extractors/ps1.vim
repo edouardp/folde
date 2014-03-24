@@ -32,7 +32,7 @@ function! folde#extractors#ps1#extract()
     if match( start_text, '^\s*<#.*$' ) == 0
         let feature_text = folde#extractors#ps1#extract_synopsis()
     else
-        let feature_text = folde#generic#extract_comment_feature()
+        return folde#generic#extract_comment_feature()
     endif
 
     let params = { 'start_text': l:start_text, 'feature_text': l:feature_text }
