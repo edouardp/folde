@@ -21,6 +21,10 @@ endfunction
 
 
 function! folde#extractors#cs#extract()
+    if folde#generic#is_c_bracket_feature()
+      return folde#generic#extract_c_bracket_feature()
+    end
+
     let start_text = Folde_Initial_Chars(getline(v:foldstart))
     let start_text = Folde_Trim_Right(start_text)
 
@@ -31,6 +35,7 @@ function! folde#extractors#cs#extract()
         let feature_text = folde#generic#extract_comment_feature()
     endif
 
-    return feature_text
+    let params = { 'start_text': l:start_text, 'feature_text': l:feature_text }
+    return l:params
 endfunction
 

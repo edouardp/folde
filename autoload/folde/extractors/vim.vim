@@ -3,6 +3,6 @@
 "
 
 function! folde#extractors#vim#extract()
-    return "WRITE VIM EXTRACTOR"
+  return folde#generic#extract_comment_feature()
 endfunction
 

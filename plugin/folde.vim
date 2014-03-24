@@ -89,7 +89,7 @@ function! Folde_Format(left, center, right)
 endfunction
 
 
-function! Folde_Formatter(dashes, level, linecount, start_text, feature_text)
+function! Folde_Formatter(params)
     if !exists('g:Folde_Formatter_Function')
         if exists('g:folde_style')
             call <sid>folde_set_style(g:folde_style)
@@ -97,8 +97,7 @@ function! Folde_Formatter(dashes, level, linecount, start_text, feature_text)
     endif
 
     if exists('g:Folde_Formatter_Function')
-        let param = { 'dashes': a:dashes, 'level': a:level, 'linecount': a:linecount, 'start_text': a:start_text, 'feature_text': a:feature_text }
-        return g:Folde_Formatter_Function(l:param)
+        return g:Folde_Formatter_Function(a:params)
     endif
 endfunction
 
@@ -114,19 +113,21 @@ function! Folde_Generator()
     let ftype = &ft
     "echo "ftype = " . ftype
     try
-      let feature_text = folde#extractors#{l:ftype}#extract()
+      let params = folde#extractors#{l:ftype}#extract()
     catch
-      let feature_text = "XXX"
+      let start_text = getline(v:foldstart)
+      let feature_text = start_text
+      let params = { 'start_text': l:start_text, 'feature_text': l:feature_text }
     endtry
-
-    if feature_text == ''
-        let feature_text = start_text
-    endif
 
     " Styling
     let linecount = v:foldend - v:foldstart + 1
 
-    return Folde_Formatter(v:folddashes, v:foldlevel, linecount, start_text, feature_text)
+    let params.dashes = v:folddashes
+    let params.level = v:foldlevel
+    let params.linecount = linecount
+
+    return Folde_Formatter(l:params)
 endfunction
 
 
