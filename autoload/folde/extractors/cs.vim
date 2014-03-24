@@ -16,7 +16,7 @@ function! folde#extractors#cs#extract_summary()
       let linenum = linenum + 1
     endwhile
 
-    return "FINISH SUMMARY EXTRACTOR"
+    return getline( linenum )
 endfunction
 
 
