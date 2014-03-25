@@ -6,17 +6,29 @@ function! folde#extractors#cs#extract_summary()
     let linenum = v:foldstart
     while linenum < v:foldend
       let line = getline( linenum )
-      if match( line, '^\s*///\s*<summary>.*</summary>.*$' ) == 0
-        return substitute( line, '^\s*///\s*<summary>\(.*\)</summary>.*$', '\1', 'g' )
+      if match( line, '^.*<summary>.*</summary>.*$' ) == 0
+        return substitute( line, '^.*<summary>\s*\(.*\)</summary>.*$', '\1', 'g' )
       end
-      if match( line, '^\s*///\s*<summary>.*$' ) == 0
+      if match( line, '^.*<summary>\s*$' ) == 0
         let line = getline( linenum + 1 )
         return substitute( line, '^\s*/*\s*\(.*\)$', '\1', 'g' )
+      end
+      if match( line, '^.*<summary>\s*.*$' ) == 0
+        let line = getline( linenum )
+        return substitute( line, '^.*<summary>\s*\(.*\)$', '\1', 'g' )
+      end
+      if match( line, '^.*@brief\s*.*$' ) == 0
+        let line = getline( linenum )
+        return substitute( line, '^.*@brief\s*\(.*\)$', '\1', 'g' )
+      end
+      if match( line, '^.*\\brief\s*.*$' ) == 0
+        let line = getline( linenum )
+        return substitute( line, '^.*\\brief\s*\(.*\)$', '\1', 'g' )
       end
       let linenum = linenum + 1
     endwhile
 
-    return getline( linenum )
+    return ''
 endfunction
 
 
@@ -29,8 +41,12 @@ function! folde#extractors#cs#extract()
     let start_text = Folde_Trim_Right(start_text)
 
     let feature_text = ''
-    if match( start_text, '^\s*///.*$' ) == 0
+    if match( start_text, '^\s*\(///\|/\*\*\|/\*!\).*$' ) == 0
         let feature_text = folde#extractors#cs#extract_summary()
+        let start_text = substitute(start_text, '^\(\s*///\).*$', '\1', 'g')
+        if feature_text == ''
+            return folde#generic#extract_comment_feature()
+        end
     else
         return folde#generic#extract_comment_feature()
     endif

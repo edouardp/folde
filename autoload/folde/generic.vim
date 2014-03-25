@@ -15,6 +15,7 @@ function! folde#generic#ends_with()
 endfunction
 
 function! folde#generic#extract_comment_feature()
+  echo "generic"
   let start_text = Folde_Initial_Chars(getline(v:foldstart))
   let start_text = Folde_Trim_Right(start_text)
 
