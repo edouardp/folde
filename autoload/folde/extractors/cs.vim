@@ -43,7 +43,7 @@ function! folde#extractors#cs#extract()
     let feature_text = ''
     if match( start_text, '^\s*\(///\|/\*\*\|/\*!\).*$' ) == 0
         let feature_text = folde#extractors#cs#extract_summary()
-        let start_text = substitute(start_text, '^\(\s*///\).*$', '\1', 'g')
+        let start_text = substitute(start_text, '^\(\s*\)\(///\|/\*\*\|/\*!\).*$', '\1\2', 'g')
         if feature_text == ''
             return folde#generic#extract_comment_feature()
         end
